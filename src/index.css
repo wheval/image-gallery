@@ -1,0 +1,73 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --color-ink: #000;
+  --color-paper: #ffffff;
+  --color-panel: #F5F5F5;
+  --color-select: #a855f7;
+}
+
+@layer base {
+  body {
+    @apply m-0 min-h-full overflow-x-hidden bg-paper font-mono text-ink antialiased;
+  }
+}
+
+@layer utilities {
+  .dotted-panel {
+    background-color: var(--color-panel);
+    background-image: url('/images/dots.png');
+    background-size: 220px 220px;
+    background-repeat: repeat;
+    background-blend-mode: multiply;
+  }
+
+  @keyframes preview-in {
+    from {
+      opacity: 0;
+      transform: scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .preview-in {
+    animation: preview-in 320ms ease-out both;
+  }
+
+  .nav-text {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+      monospace;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -1.6%;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
+
+  .thumb {
+    width: 140px;
+    height: 140px;
+    opacity: 1;
+    border-width: 3px;
+    border-style: solid;
+    -webkit-tap-highlight-color: transparent;
+    transform-origin: center center;
+  }
+
+  .preview-image {
+    width: 632px;
+    height: 632px;
+    opacity: 1;
+    object-fit: cover;
+  }
+}
