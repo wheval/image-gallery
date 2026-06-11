@@ -6,9 +6,16 @@ type ThumbButtonProps = {
   alt: string
   isSelected: boolean
   onSelect: () => void
+  className?: string
 }
 
-export function ThumbButton({ src, alt, isSelected, onSelect }: ThumbButtonProps) {
+export function ThumbButton({
+  src,
+  alt,
+  isSelected,
+  onSelect,
+  className = '',
+}: ThumbButtonProps) {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const pressed = useRef(false)
 
@@ -49,7 +56,7 @@ export function ThumbButton({ src, alt, isSelected, onSelect }: ThumbButtonProps
       onClick={onSelect}
       aria-pressed={isSelected}
       aria-label={`View photo: ${alt}`}
-      className={`thumb cursor-pointer touch-manipulation will-change-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-select ${
+      className={`thumb cursor-pointer touch-manipulation will-change-transform focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-select ${className} ${
         isSelected ? 'border-select' : 'border-transparent'
       }`}
     >

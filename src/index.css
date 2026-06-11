@@ -16,6 +16,16 @@
   body {
     @apply m-0 min-h-full overflow-x-hidden bg-paper font-mono text-ink antialiased;
   }
+
+  /* Mobile only: lock the shell so the gallery scrolls internally */
+  @media (max-width: 1023px) {
+    html,
+    body,
+    #root {
+      height: 100%;
+      overflow: hidden;
+    }
+  }
 }
 
 @layer utilities {
@@ -69,5 +79,52 @@
     height: 632px;
     opacity: 1;
     object-fit: cover;
+  }
+
+  @media (max-width: 1023px) {
+    .app-shell {
+      height: 100dvh;
+      overflow: hidden;
+    }
+  }
+
+  @keyframes viewer-in {
+    from {
+      opacity: 0;
+      transform: scale(1.02);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .viewer-in {
+    animation: viewer-in 220ms ease-out both;
+  }
+
+  @keyframes menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .menu-in {
+    animation: menu-in 180ms ease-out both;
+  }
+
+  .viewer-strip {
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .viewer-strip::-webkit-scrollbar {
+    display: none;
   }
 }

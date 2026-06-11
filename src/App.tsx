@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CornerBorder } from './components/CornerBorder'
+import { MobileGallery } from './components/MobileGallery'
 import { MorphSignUpButton } from './components/MorphSignUpButton'
 import { ThumbButton } from './components/ThumbButton'
 
@@ -30,10 +31,17 @@ type NavProps = {
 }
 
 function Nav({ activeImage }: NavProps) {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
-    <header className="border-b-2 border-dashed border-ink/20 bg-paper">
-      <nav className="flex items-center justify-between px-6 py-4 sm:px-8">
-        <ul className="flex items-center gap-7">
+    <header className="relative shrink-0 border-b-2 border-dashed border-ink/20 bg-paper">
+      <nav className="flex items-center justify-between gap-4 px-4 py-3 sm:px-8 sm:py-4">
+        {/* Mobile: just Home + hamburger */}
+        <a href="#" className="nav-text text-ink lg:hidden">
+          Home
+        </a>
+
+        <ul className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link, i) => (
             <li key={link}>
               <a
@@ -49,7 +57,7 @@ function Nav({ activeImage }: NavProps) {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="hidden shrink-0 items-center gap-3 lg:flex">
           <a
             href="#"
             className="nav-text group relative bg-panel px-5 py-2.5 transition-colors hover:bg-ink/10"
@@ -59,7 +67,86 @@ function Nav({ activeImage }: NavProps) {
           </a>
           <MorphSignUpButton activeImage={activeImage} />
         </div>
+
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          className="flex w-[52px] h-[44px] cursor-pointer items-center justify-center bg-ink lg:hidden"
+          style={{ WebkitTapHighlightColor: 'transparent' }}
+        >
+          {menuOpen ? (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M6 6L18 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M18 6L6 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          ) : (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M10 5H20"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M4 12H20"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M4 19H14"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          )}
+        </button>
       </nav>
+
+      {/* Mobile dropdown menu */}
+      {menuOpen && (
+        <div className="menu-in absolute inset-x-0 top-full z-40 border-b-2 border-dashed border-ink/20 bg-paper lg:hidden">
+          <ul className="flex flex-col px-4 py-2">
+            {NAV_LINKS.map((link, i) => (
+              <li key={link}>
+                <a
+                  href="#"
+                  onClick={() => setMenuOpen(false)}
+                  className={`nav-text block border-b border-dashed border-ink/10 py-3 ${
+                    i === 0 ? 'text-ink' : 'text-[#5C5C5C]'
+                  }`}
+                >
+                  {link}
+                </a>
+              </li>
+            ))}
+            <li>
+              <a
+                href="#"
+                onClick={() => setMenuOpen(false)}
+                className="nav-text block border-b border-dashed border-ink/10 py-3 text-[#5C5C5C]"
+              >
+                Login
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                onClick={() => setMenuOpen(false)}
+                className="nav-text my-3 inline-block bg-ink px-5 py-2.5 text-paper"
+              >
+                Sign up
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
     </header>
   )
 }
@@ -69,38 +156,39 @@ export default function App() {
   const photo = PHOTOS[selected]
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="app-shell flex w-full flex-col max-lg:h-dvh">
       <Nav activeImage={PHOTOS[selected].src} />
 
-      <main className="flex w-full flex-col items-start md:flex-row">
-        {/* Thumbnail grid */}
-        <section className="shrink-0 bg-paper px-6 py-6">
-          <ul className="grid grid-cols-3 gap-x-8 gap-y-6">
-            {PHOTOS.map((p, i) => {
-              const isSelected = i === selected
-              return (
-                <li key={p.src}>
-                  <ThumbButton
-                    src={p.src}
-                    alt={p.alt}
-                    isSelected={isSelected}
-                    onSelect={() => setSelected(i)}
-                  />
-                </li>
-              )
-            })}
+      <main className="flex w-full flex-col items-start max-lg:min-h-0 max-lg:flex-1 lg:flex-row lg:gap-20">
+        {/* Desktop thumbnail grid */}
+        <section className="hidden shrink-0 bg-paper py-6 pl-10 pr-4 lg:block">
+          <ul className="grid grid-cols-3 gap-x-10 gap-y-10">
+            {PHOTOS.map((p, i) => (
+              <li key={p.src}>
+                <ThumbButton
+                  src={p.src}
+                  alt={p.alt}
+                  isSelected={i === selected}
+                  onSelect={() => setSelected(i)}
+                />
+              </li>
+            ))}
           </ul>
         </section>
 
-        {/* Preview pane */}
-        <section className="dotted-panel flex w-full flex-1 items-start justify-start self-stretch py-6 pl-[99px] pr-6">
+        {/* Desktop preview */}
+        <section className="dotted-panel hidden w-full flex-1 items-start justify-start self-stretch py-6 pl-[99px] pr-6 lg:flex">
           <img
             key={photo.src}
             src={photo.src}
             alt={photo.alt}
             className="preview-in preview-image"
+            draggable={false}
           />
         </section>
+
+        {/* Mobile: Apple Photos style gallery */}
+        <MobileGallery photos={PHOTOS} selected={selected} onSelect={setSelected} />
       </main>
     </div>
   )
