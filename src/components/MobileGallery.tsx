@@ -266,13 +266,8 @@ export function MobileGallery({ photos, selected, onSelect }: MobileGalleryProps
   return (
     <>
       <div className="flex min-h-0 flex-1 flex-col lg:hidden">
-        <div className="flex items-end justify-between px-4 pt-4 pb-2">
-          <h1 className="text-[22px] font-bold tracking-[-0.016em]">Library</h1>
-          <p className="nav-text text-[#5C5C5C]">{photos.length} photos</p>
-        </div>
-
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <ul className="grid grid-cols-3 gap-3 bg-paper p-2 pb-6">
+        <div className="min-h-0 flex-1 pt-4 overflow-y-auto">
+          <ul className="grid grid-cols-3 gap-3 bg-paper p-4 pb-6">
             {photos.map((p, i) => (
               <li key={p.src}>
                 <button
